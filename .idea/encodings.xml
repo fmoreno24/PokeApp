@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/app/src/main/res/anim" charset="windows-1251" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/anim/atg.xml" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/anim/atgthree.xml" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/anim/atgtwo.xml" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/anim/packageimg.xml" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/font" charset="windows-1251" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/font/ml.ttf" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/font/mm.ttf" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/font/mr.ttf" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/font/myprior.xml" charset="UTF-8" />
+  </component>
+</project>

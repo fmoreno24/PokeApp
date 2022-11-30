@@ -1,0 +1,15 @@
+<set
+    xmlns:android="https://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:fillAfter="true"
+    android:interpolator="@android:anim/bounce_interpolator"
+    tools:ignore="NamespaceTypo">
+
+    <scale
+        android:duration="500"
+        android:fromXScale="1.0"
+        android:fromYScale="0.0"
+        android:toXScale="1.0"
+        android:toYScale="1.0" />
+
+</set>
