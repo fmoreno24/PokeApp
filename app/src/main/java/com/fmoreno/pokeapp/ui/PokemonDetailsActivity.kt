@@ -23,10 +23,11 @@ import com.fmoreno.pokeapp.model.FlavorTextEntry
 import com.fmoreno.pokeapp.model.Genera
 import com.fmoreno.pokeapp.model.Pokemon
 import com.fmoreno.pokeapp.model.Species
+import com.fmoreno.pokeapp.ui.base.BaseActivity
 import com.google.gson.Gson
 import java.util.*
 
-class PokemonDetailsActivity: AppCompatActivity() {
+class PokemonDetailsActivity: BaseActivity() {
     private lateinit var binding: ActivityPokemonDetailsBinding
     private lateinit var mainViewModel: MainViewModel
     var pokemon: Pokemon? = null
@@ -57,6 +58,7 @@ class PokemonDetailsActivity: AppCompatActivity() {
      * Obtener información detallada del pokemon
      */
     private fun getPokemon() {
+        launchLoading()
         pokemon?.id?.let { mainViewModel.getPokemon(it) }
     }
 
@@ -110,6 +112,7 @@ class PokemonDetailsActivity: AppCompatActivity() {
 
         binding.tvGenera.text = pokemon?.genera
         binding.tvNotas.text = pokemon?.description
+        hideLoading()
     }
 
     fun setFirstInfoPokemon(){
@@ -170,13 +173,6 @@ class PokemonDetailsActivity: AppCompatActivity() {
         }
     }
 
-    /**
-     * Modal de error de conexión a los servicios.
-     */
-    @SuppressLint("NewApi")
-    protected fun launchError() {
-        Log.e("launchError", "launchError");
-    }
 
     private fun getPokemonGenera(generaList: List<Genera>?): String {
         var index = 0
@@ -195,9 +191,5 @@ class PokemonDetailsActivity: AppCompatActivity() {
         flavorText = flavorText.replace("POKéMON", "Pokémon")
         flavorText = flavorText.replace("\n", " ")
         return flavorText
-    }
-
-    fun String.titlecaseFirstCharIfItIsLowercase() = replaceFirstChar {
-        if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString()
     }
 }

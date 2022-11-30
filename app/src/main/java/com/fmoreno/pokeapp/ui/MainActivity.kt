@@ -22,9 +22,10 @@ import com.fmoreno.pokeapp.databinding.ActivityMainBinding
 import com.fmoreno.pokeapp.model.Pokemon
 import com.fmoreno.pokeapp.model.PokemonResults
 import com.fmoreno.pokeapp.model.PokemonsResponse
+import com.fmoreno.pokeapp.ui.base.BaseActivity
 import com.google.gson.Gson
 
-class MainActivity : AppCompatActivity(), OnItemClickListener {
+class MainActivity : BaseActivity(), OnItemClickListener {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var mainViewModel: MainViewModel
@@ -33,7 +34,7 @@ class MainActivity : AppCompatActivity(), OnItemClickListener {
 
     private var adapter: RecyclerViewAdapter? = null
 
-    private var progressBar: ProgressBar? = null
+    var pokemonDetail: Pokemon? = null
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,7 +59,7 @@ class MainActivity : AppCompatActivity(), OnItemClickListener {
      * Obtener listado de pokemones
      */
     private fun getPokemonsList() {
-        //launchLoading()
+        launchLoading()
         mainViewModel.getPokemonList()
     }
 
@@ -69,9 +70,6 @@ class MainActivity : AppCompatActivity(), OnItemClickListener {
             when (it) {
                 is MainViewModel.ViewEvent.QueryGetPokemonListSuccess -> validatePokemonList(
                     it.responsePokemonListDTO
-                )
-                is MainViewModel.ViewEvent.QueryGetPokemonSuccess -> validatePokemon(
-                    it.responsePokemon
                 )
                 is MainViewModel.ViewEvent.Errors -> launchError()
                 else -> {
@@ -90,7 +88,6 @@ class MainActivity : AppCompatActivity(), OnItemClickListener {
     private fun initOperation(){
         try{
             adapter = RecyclerViewAdapter(this)
-            progressBar = ProgressBar(this, null, R.attr.progressBarStyleLarge)
 
             /*binding.include.rlEmptyView.visibility = View.GONE
 
@@ -101,9 +98,8 @@ class MainActivity : AppCompatActivity(), OnItemClickListener {
 
             val params = RelativeLayout.LayoutParams(100, 100)
             params.addRule(RelativeLayout.CENTER_IN_PARENT)
-            progressBar!!.visibility = View.GONE
 
-            binding.rlPokemonList.addView(progressBar, params)
+            //binding.rlPokemonList.addView(progressBar, params)
             binding.rvPokemons.layoutManager = LinearLayoutManager(this)
             binding.rvPokemons.adapter = adapter
 
@@ -140,19 +136,8 @@ class MainActivity : AppCompatActivity(), OnItemClickListener {
             //mainViewModel.getPokemon(toLoadList)
         }*/
         adapter?.addPokemons(response.results as MutableList<Pokemon>)
+        hideLoading()
     }
-
-    /**
-     * Validación de respuesta de la obtención de pokemon.
-     */
-    @RequiresApi(Build.VERSION_CODES.N)
-    @SuppressLint("WrongConstant")
-    private fun validatePokemon(pokemon: Pokemon) {
-        adapter?.addPokemon(pokemon)
-    }
-
-    var pokemonDetail: Pokemon? = null
-
 
     override fun onItemClick(pokemon: Pokemon?, view: View) {
         pokemonDetail = pokemon
@@ -165,13 +150,5 @@ class MainActivity : AppCompatActivity(), OnItemClickListener {
 
         startActivity(datailActivity, options.toBundle())
         this.overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right)
-    }
-
-    /**
-     * Modal de error de conexión a los servicios.
-     */
-    @SuppressLint("NewApi")
-    protected fun launchError() {
-        Log.e("launchError", "launchError");
     }
 }

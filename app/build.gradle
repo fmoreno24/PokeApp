@@ -72,4 +72,10 @@ dependencies {
 
     implementation 'androidx.palette:palette-ktx:1.0.0'
 
+    //Room
+    implementation "androidx.room:room-runtime:2.2.6"
+    implementation "androidx.room:room-ktx:2.2.6"
+    kapt "androidx.room:room-compiler:2.2.6"
+    kapt "org.xerial:sqlite-jdbc:3.34.0"
+
 }

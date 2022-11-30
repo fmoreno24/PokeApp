@@ -21,4 +21,10 @@
         <item name="cornerSizeBottomRight">0dp</item>
         <item name="cornerSizeBottomLeft">80dp</item>
     </style>
+
+    <style name="CustomDialog" parent="android:Theme.Dialog">
+        <item name="android:windowIsTranslucent">false</item>
+        <item name="android:clickable">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
 </resources>
