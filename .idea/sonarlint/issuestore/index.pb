@@ -1,8 +1,6 @@
 
 j
 :app/src/main/java/com/fmoreno/pokeapp/ui/SplashActivity.kt,6\c\6cfa369936c701f06e8f306576ade8d67e299f44
-n
->app/src/main/java/com/fmoreno/pokeapp/adapter/PokemonFilter.kt,c\b\cb63a6d309ce3d6e160c039b4175c71c10c11157
 <
 build.gradle,f\0\f07866736216be0ee2aba49e392191aeae700a35
 o
@@ -25,16 +23,6 @@ m
 =app/src/main/java/com/fmoreno/pokeapp/model/PokemonResults.kt,5\3\53b4dec7e05f63f23a22936d648e30c22dcaa9f5
 s
 Capp/src/main/java/com/fmoreno/pokeapp/utils/ImageLoadingListener.kt,0\8\08357bb14203f6a85ea8440f07c45a40a5a4c3c2
-t
-Dapp/src/main/java/com/fmoreno/pokeapp/adapter/OnItemClickListener.kt,0\2\0261076b9f90af33f1d0684eb1c2f526034f8100
-r
-Bapp/src/main/java/com/fmoreno/pokeapp/adapter/PokemonViewHolder.kt,0\9\093d312ea35d26b179d2f36f8e00b5ad6efd334c
-P
- app/src/main/AndroidManifest.xml,8\c\8c55c3ccc257e5907959013f99656e4c8ec3903e
-t
-Dapp/src/main/java/com/fmoreno/pokeapp/adapter/RecyclerViewAdapter.kt,c\7\c7342d199216fadccc1432dd4c57a04e100e9144
-c
-3app/src/main/java/com/fmoreno/pokeapp/model/Type.kt,9\6\96de406d6e944c9b1787292b1519bbd8d4ba5739
 d
 4app/src/main/java/com/fmoreno/pokeapp/model/TypeX.kt,b\7\b7c4dbfccef979e42a21e29437d434bac575c4d9
 c
@@ -47,11 +35,5 @@ g
 7app/src/main/java/com/fmoreno/pokeapp/model/Language.kt,a\b\ab1ed40639bc861e0fc477e54ccf8d4c1a4ff4a2
 n
 >app/src/main/java/com/fmoreno/pokeapp/model/FlavorTextEntry.kt,5\e\5ea616a9816ad2887774bac6c65e78af16beaa0c
-f
-6app/src/main/java/com/fmoreno/pokeapp/model/Species.kt,b\8\b8447017cc2d94750e921a202dc858cb893efe79
-f
-6app/src/main/java/com/fmoreno/pokeapp/model/Pokemon.kt,c\3\c3f84b2dbc791d399ec80d927e6d1ec982a9658e
-i
-9app/src/main/java/com/fmoreno/pokeapp/ui/MainViewModel.kt,7\5\750a2abbff96cc59782b37bb01fe416c3951073d
 {
 Kapp/src/main/java/com/fmoreno/pokeapp/data/interactor/IPokemonInteractor.kt,6\4\640b50b5674762858e99b5b425948a424730d294

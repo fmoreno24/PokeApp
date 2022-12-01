@@ -78,4 +78,10 @@ dependencies {
     kapt "androidx.room:room-compiler:2.2.6"
     kapt "org.xerial:sqlite-jdbc:3.34.0"
 
+    //Google Guava
+    implementation "com.google.guava:guava:30.1.1-android"
+
+    //Apache commons io
+    implementation 'commons-io:commons-io:2.8.0'
+
 }

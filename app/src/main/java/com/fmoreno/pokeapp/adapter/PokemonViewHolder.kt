@@ -21,28 +21,18 @@ import com.google.android.material.card.MaterialCardView
 
 class PokemonViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     var cvItemPokemon: MaterialCardView? = itemView.findViewById(R.id.cv_item_pokemon)
-    var post: ImageView? = itemView.findViewById(R.id.imgView_post)
+    var post: ImageView? = itemView.findViewById(R.id.pokemon_image)
     var tvIdPokemon: TextView? = itemView.findViewById(R.id.tv_id_pokemon)
     var tvNamePokemon: TextView? = itemView.findViewById(R.id.tv_name_pokemon)
     private var dominantColor: Int = Color.GRAY
 
     fun bindLaunch(id: Int) {
-        val resources = itemView.resources
         setPokemonPoster(id)
-        //bindNameAndDate(movie, resources)
     }
 
     private fun setPokemonPoster(id: Int) {
-        //val progressView = itemView.findViewById<View>(R.id.moviePosterProgress).apply { visibility = View.VISIBLE }
-        //val loadingListener = ImageLoadingListener(progressView)
         val posterPath = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png"
 
-        /*Glide.with(itemView.context.applicationContext)
-            .load(posterPath)
-            .error(R.drawable.ic_launcher_foreground)
-            .fallback(R.drawable.ic_launcher_foreground)
-            .listener(loadingListener)
-            .into(itemView.findViewById(R.id.imgView_post))*/
         Glide.with(itemView.context.applicationContext)
             .asBitmap()
             .load(posterPath)
@@ -88,9 +78,5 @@ class PokemonViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                 cvItemPokemon?.setCardBackgroundColor(dominantColor)
             }
         }
-    }
-
-    private fun bindNameAndDate(pokemon: Pokemon, resources: Resources) {
-        //itemView.findViewById<TextView>(R.id.title).text = movie.title
     }
 }

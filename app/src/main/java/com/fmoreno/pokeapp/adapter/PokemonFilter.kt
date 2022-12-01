@@ -2,17 +2,18 @@ package com.fmoreno.pokeapp.adapter
 
 import android.widget.Filter
 import com.fmoreno.pokeapp.model.Pokemon
+import com.fmoreno.pokeapp.persistence.entities.PokemonEntity
 import java.util.ArrayList
 
-class PokemonFilter (myAdapter: RecyclerViewAdapter, originalList: MutableList<Pokemon> ) : Filter(){
+class PokemonFilter (myAdapter: RecyclerViewAdapter, originalList: MutableList<PokemonEntity> ) : Filter(){
     private var recyclerViewAdapter: RecyclerViewAdapter? = myAdapter
-    private var originalList: List<Pokemon>? = originalList
-    private var filteredList: MutableList<Pokemon>? = listOf<Pokemon>().toMutableList()
+    private var originalList: List<PokemonEntity>? = originalList
+    private var filteredList: MutableList<PokemonEntity>? = listOf<PokemonEntity>().toMutableList()
 
-    fun PopularFilter(myAdapter: RecyclerViewAdapter?, originalList: List<Pokemon>?) {
+    fun PopularFilter(myAdapter: RecyclerViewAdapter?, originalList: List<PokemonEntity>?) {
         recyclerViewAdapter = myAdapter
         this.originalList = originalList
-        filteredList = ArrayList<Pokemon>()
+        filteredList = ArrayList<PokemonEntity>()
     }
 
     override fun performFiltering(charSequence: CharSequence): FilterResults? {
@@ -35,7 +36,7 @@ class PokemonFilter (myAdapter: RecyclerViewAdapter, originalList: MutableList<P
 
     override fun publishResults(charSequence: CharSequence?, filterResults: FilterResults) {
         recyclerViewAdapter?.mPokemon?.clear()
-        var pokemons: ArrayList<Pokemon> = filterResults.values as ArrayList<Pokemon>
+        var pokemons: ArrayList<PokemonEntity> = filterResults.values as ArrayList<PokemonEntity>
         if(pokemons!= null && pokemons.size > 0)
             for (pokemon in pokemons){
                 recyclerViewAdapter?.mPokemon?.add(pokemon)

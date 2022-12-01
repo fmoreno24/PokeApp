@@ -1,6 +1,9 @@
 package com.fmoreno.pokeapp.adapter
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,13 +13,15 @@ import android.widget.Filterable
 import androidx.recyclerview.widget.RecyclerView
 import com.fmoreno.pokeapp.R
 import com.fmoreno.pokeapp.model.Pokemon
+import com.fmoreno.pokeapp.persistence.entities.PokemonEntity
 import java.util.*
 
-class RecyclerViewAdapter(oItemClickListener: OnItemClickListener) : RecyclerView.Adapter<PokemonViewHolder>(),
+class RecyclerViewAdapter(oItemClickListener: OnItemClickListener, var context: Context) :
+    RecyclerView.Adapter<PokemonViewHolder>(),
     Filterable {
-    //private val mMovies: MutableList<Movie> = movies
-    var mPokemon: MutableList<Pokemon> = listOf<Pokemon>().toMutableList()
-    var mFilteredMoviesList: MutableList<Pokemon> = listOf<Pokemon>().toMutableList()
+
+    var mPokemon: MutableList<PokemonEntity> = listOf<PokemonEntity>().toMutableList()
+    var mFilteredMoviesList: MutableList<PokemonEntity> = listOf<PokemonEntity>().toMutableList()
 
     private val onItemClickListener: OnItemClickListener? = oItemClickListener
     var mFilter: PokemonFilter? = null
@@ -31,14 +36,21 @@ class RecyclerViewAdapter(oItemClickListener: OnItemClickListener) : RecyclerVie
     override fun onBindViewHolder(holder: PokemonViewHolder, position: Int) {
         val startAnimation = AnimationUtils.loadAnimation(holder.itemView.context, R.anim.slide_up)
 
-        val pokemon: Pokemon = mPokemon.get(position)
-        val trimmedUrl = pokemon.url?.dropLast(1)
-        pokemon.id = trimmedUrl!!.substring(trimmedUrl.lastIndexOf("/") + 1).toInt()
-        //holder.post?.setOnClickListener { onItemClickListener!!.onItemClick(pokemon, holder.post!!) }
-        holder.bindLaunch(pokemon.id)
-        holder.tvIdPokemon!!.text = "# "+ pokemon.id
+        val pokemon: PokemonEntity = mPokemon.get(position)
+        if(isInternetAvailable()){
+            holder.bindLaunch(pokemon.id)
+        } else {
+            holder.post?.setImageResource(R.drawable.pokemon_no_found)
+        }
+
+        holder.tvIdPokemon!!.text = "# " + pokemon.id
         holder.tvNamePokemon!!.text = pokemon.name.titlecaseFirstCharIfItIsLowercase()
-        holder.cvItemPokemon!!.setOnClickListener { onItemClickListener!!.onItemClick(pokemon, holder.post!!) }
+        holder.cvItemPokemon!!.setOnClickListener {
+            onItemClickListener!!.onItemClick(
+                pokemon,
+                holder.post!!
+            )
+        }
         holder.itemView.startAnimation(startAnimation)
     }
 
@@ -62,14 +74,22 @@ class RecyclerViewAdapter(oItemClickListener: OnItemClickListener) : RecyclerVie
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun addPokemons(pokemons: MutableList<Pokemon>) {
+    fun addPokemons(pokemons: MutableList<PokemonEntity>) {
         this.mPokemon.addAll(pokemons)
         notifyDataSetChanged()
     }
 
-    @SuppressLint("NotifyDataSetChanged")
-    fun addPokemon(pokemon: Pokemon) {
-        this.mPokemon.add(pokemon)
+    internal fun setPokemons(pokemons: List<PokemonEntity>) {
+        this.mPokemon = pokemons.toMutableList()
         notifyDataSetChanged()
+    }
+
+    fun isInternetAvailable(): Boolean {
+        var isConnected: Boolean = false // Initial Value
+        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val activeNetwork: NetworkInfo? = connectivityManager.activeNetworkInfo
+        if (activeNetwork != null && activeNetwork.isConnected)
+            isConnected = true
+        return isConnected
     }
 }

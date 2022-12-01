@@ -4,11 +4,10 @@ import android.R
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.util.Log
 import android.view.View
-import android.widget.ProgressBar
 import android.widget.RelativeLayout
 import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.SearchView
@@ -19,9 +18,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.fmoreno.pokeapp.adapter.OnItemClickListener
 import com.fmoreno.pokeapp.adapter.RecyclerViewAdapter
 import com.fmoreno.pokeapp.databinding.ActivityMainBinding
-import com.fmoreno.pokeapp.model.Pokemon
 import com.fmoreno.pokeapp.model.PokemonResults
-import com.fmoreno.pokeapp.model.PokemonsResponse
+import com.fmoreno.pokeapp.persistence.entities.PokemonEntity
 import com.fmoreno.pokeapp.ui.base.BaseActivity
 import com.google.gson.Gson
 
@@ -34,7 +32,7 @@ class MainActivity : BaseActivity(), OnItemClickListener {
 
     private var adapter: RecyclerViewAdapter? = null
 
-    var pokemonDetail: Pokemon? = null
+    var pokemonDetail: PokemonEntity? = null
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,8 +40,16 @@ class MainActivity : BaseActivity(), OnItemClickListener {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setupView()
-
+        if(appDatabaseViewModel != null){
+            //appDatabaseViewModel.export()
+        }
         //getPokemonList()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
+        super.onSaveInstanceState(outState, outPersistentState)
+        binding.searchBar.setQuery("", false)
+        binding.searchBar.setIconified(true)
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -60,7 +66,23 @@ class MainActivity : BaseActivity(), OnItemClickListener {
      */
     private fun getPokemonsList() {
         launchLoading()
-        mainViewModel.getPokemonList()
+        appDatabaseViewModel.allItems.observe(this, Observer { items ->
+            if(items != null && items.size > 0){
+                adapter!!.setPokemons(items)
+                hideLoading()
+            } else {
+                if(isInternetAvailable(this)){
+                    mainViewModel.getPokemonList()
+                } else {
+                    // No tiene conexión a internet
+                    launchPopupCancelConfirm("Advertencia!",
+                    "No tiene conexión a Internet",
+                    "Para poder consultar el listado de pokemon debe conectarse a internet.",
+                    false)
+                    hideLoading()
+                }
+            }
+        })
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -87,14 +109,14 @@ class MainActivity : BaseActivity(), OnItemClickListener {
      */
     private fun initOperation(){
         try{
-            adapter = RecyclerViewAdapter(this)
+            adapter = RecyclerViewAdapter(this, this)
 
-            /*binding.include.rlEmptyView.visibility = View.GONE
+            binding.include.rlEmptyView.visibility = View.GONE
 
             binding.include.ivRefresh.setOnClickListener(){
                 binding.include.ivRefresh.visibility = View.GONE
-                //getPokemonList()
-            }*/
+                getPokemonsList()
+            }
 
             val params = RelativeLayout.LayoutParams(100, 100)
             params.addRule(RelativeLayout.CENTER_IN_PARENT)
@@ -108,11 +130,13 @@ class MainActivity : BaseActivity(), OnItemClickListener {
             binding.searchBar.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String): Boolean {
                     adapter?.getFilter()?.filter(query)
+                    binding.include.rlEmptyView.visibility = if (adapter?.mPokemon?.size!! > 0) View.GONE else View.VISIBLE
                     return true
                 }
 
                 override fun onQueryTextChange(newText: String): Boolean {
                     adapter?.getFilter()?.filter(newText)
+                    binding.include.rlEmptyView.visibility = if (adapter?.mPokemon?.size!! > 0) View.GONE else View.VISIBLE
                     return true
                 }
             })
@@ -122,24 +146,33 @@ class MainActivity : BaseActivity(), OnItemClickListener {
         }
     }
 
+
+
     /**
      * Validación de respuesta de la obtención de pokemones.
      */
     @RequiresApi(Build.VERSION_CODES.N)
     @SuppressLint("WrongConstant")
     private fun validatePokemonList(response: PokemonResults) {
-        /*for(poke in response.results) {
-            toLoadList.add(poke)
+        var pokemonsList: MutableList<PokemonEntity> = listOf<PokemonEntity>().toMutableList()
+        try{
+            for(pokemon in response.results) {
+                var pokemonEntity = PokemonEntity()
+                val trimmedUrl = pokemon.url?.dropLast(1)
+                pokemonEntity.id = trimmedUrl!!.substring(trimmedUrl.lastIndexOf("/") + 1).toInt()
+                pokemonEntity.name = pokemon.name
+                pokemonEntity.url = pokemon.url!!
+                pokemonsList.add(pokemonEntity)
+                appDatabaseViewModel.insertPokemon(pokemonEntity)
+            }
+        }catch (ex: Exception){
+            Log.e("validatePokemonList", ex.toString())
         }
-        if(toLoadList.size > 0){
-            //mainViewModel.getPokemon()
-            //mainViewModel.getPokemon(toLoadList)
-        }*/
-        adapter?.addPokemons(response.results as MutableList<Pokemon>)
+        adapter?.addPokemons(pokemonsList as MutableList<PokemonEntity>)
         hideLoading()
     }
 
-    override fun onItemClick(pokemon: Pokemon?, view: View) {
+    override fun onItemClick(pokemon: PokemonEntity?, view: View) {
         pokemonDetail = pokemon
         val datailActivity = Intent(this, PokemonDetailsActivity::class.java)
         datailActivity.putExtra("pokemonDetail", pokemonDetail)

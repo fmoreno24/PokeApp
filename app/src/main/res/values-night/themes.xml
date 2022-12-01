@@ -27,4 +27,10 @@
         <item name="android:clickable">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
     </style>
+
+    <style name="AlertDialogCustom" parent="android:Theme.Dialog">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:clickable">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
 </resources>
