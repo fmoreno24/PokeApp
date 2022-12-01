@@ -1,4 +1,4 @@
-# FabinMovies Kotlin
+# PokeApp Kotlin
 Aplicación Android desarrollada en Kotlin
 
 ## 🌟 Características
