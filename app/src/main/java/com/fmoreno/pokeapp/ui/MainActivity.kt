@@ -79,6 +79,8 @@ class MainActivity : BaseActivity(), OnItemClickListener {
                     "No tiene conexión a Internet",
                     "Para poder consultar el listado de pokemon debe conectarse a internet.",
                     false)
+                    binding.include.rlEmptyView.visibility = if (adapter?.mPokemon?.size!! > 0) View.GONE else View.VISIBLE
+                    binding.include.ivRefresh.visibility = if (adapter?.mPokemon?.size!! > 0) View.GONE else View.VISIBLE
                     hideLoading()
                 }
             }
